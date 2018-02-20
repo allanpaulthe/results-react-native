@@ -41,26 +41,20 @@ class Home extends Component {
       data1:[],
     });
   }
-  componentWillMount(){
-    const { params } = this.props.navigation.state;
-    if(params.d=="IT")
-      this.refreshDataFromServer(1);
-    if(params.d=="CS")
-      this.refreshDataFromServer(2);
+  componentDidMount(){
+    this.refreshDataFromServer();
   }
-  refreshDataFromServer(i){
-    if(i==1)
-      getit().then((movies)=> {
-        this.setState({ dataapi: movies });
-      }).catch((error)=>{
-        this.setState({ dataapi: [] });
-      });
-    if(i==2)
-      getcs().then((movies)=> {
-        this.setState({ dataapi: movies });
-      }).catch((error)=>{
-        this.setState({ dataapi: [] });
-      });
+  refreshDataFromServer(){
+    getit().then((movies)=> {
+      this.setState({ dataapi: movies });
+    }).catch((error)=>{
+      this.setState({ dataapi: [] });
+    });
+    getcs().then((movies)=> {
+      this.setState({ data1: movies });
+    }).catch((error)=>{
+      this.setState({ data1: [] });
+    });
   }
   static navigationOptions = {
     title: 'Welcome',
@@ -69,30 +63,38 @@ class Home extends Component {
   };
   render() {
     const { navigate } = this.props.navigation;
-    const { state } = this.props.navigation;
     return (
      <View style={styles.container}>
+        <View>
+          <Text>Information Technology</Text>
+        </View> 
         <FlatList
           style={styles.flat}
           data={this.state.dataapi}
           renderItem={({item,index}) => {
             return(
-              <FlatListItem item={item} index={index} navigate={navigate} department={state.params.d} >
+              <FlatListItem item={item} index={index} navigate={navigate} department={"Information Technology"} >
 
               </FlatListItem>
             )
           }}
           keyExtractor={item => item.rollno}
         />
-         <View>
-          <TouchableOpacity
-           onPress={() => navigate("totalA",{data:this.state.dataapi,d:state.params.d,sem:state.params.sem})}
-          >
-            <View style={styles.button}>
-                <Text style={styles.buttonText}>Total Analysis</Text>
-            </View>
-          </TouchableOpacity>
-        </View>         
+        <View>
+          <Text>Computer Science</Text>
+        </View> 
+        <FlatList
+          style={styles.flat}
+          data={this.state.data1}
+          renderItem={({item,index}) => {
+            return(
+              <FlatListItem item={item} index={index} navigate={navigate} department={"Computer Science"}>
+
+              </FlatListItem>
+            )
+          }}
+          keyExtractor={item => item.rollno}
+        />        
       </View>
     );
   }
@@ -120,18 +122,6 @@ const styles = StyleSheet.create({
     color: "#3a3d42",
     marginBottom: 5,
     padding:5,
-  },
-  button: {
-    backgroundColor: "#00af8f",
-    paddingVertical: 20,
-    alignItems: "center",
-    justifyContent: "center",
-    height:20,
-    width:width,
-  },
-  buttonText: {
-    color: "#FFF",
-    fontSize: 18,
   },
 });
 

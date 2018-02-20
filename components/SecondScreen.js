@@ -25,7 +25,7 @@ class SecondScreen extends Component {
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>
-          Sorry this is not the Home!
+          nothing
         </Text>
       </View>
     );
