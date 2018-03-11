@@ -86,7 +86,7 @@ export default class collegesignupScreen extends Component {
       }
     }
       static navigationOptions = {
-        title: 'signup',
+        title: 'College signup',
         headerStyle: { backgroundColor: '#e74c3c',height:25 },
         headerTitleStyle: { color: '#22313f',fontSize:15,justifyContent:"center",alignSelf: 'center' },
       };
@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
     right: 0,
   },
   wrapper: {
-    paddingVertical: 100,
+    paddingVertical: 70,
   },
   inputWrap: {
     flexDirection: "row",

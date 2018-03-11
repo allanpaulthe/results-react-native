@@ -12,7 +12,6 @@ import {
   Alert
 } from 'react-native';
 import { StackNavigator } from "react-navigation";
-import { loginfunction } from '../networking/server';
 
 const { width, height } = Dimensions.get("window");
 const mark = require("./images/login1_mark.png");
@@ -21,13 +20,16 @@ const personIcon = require("./images/login1_person.png");
 const email = require("./images/email.png");
 
 
-export default class collegeHome extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {user: '',pass: '',users:[],};
-      }
-      static navigationOptions = {
-        title: 'Home',
+export default class uploadHome extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      sem: '',
+      batch: '',
+    };
+  }
+    static navigationOptions = {
+        title: 'upload',
         headerStyle: { backgroundColor: '#e74c3c',height:25 },
         headerTitleStyle: { color: '#22313f',fontSize:15,justifyContent:"center",alignSelf: 'center' },
       };
@@ -39,30 +41,47 @@ export default class collegeHome extends Component {
             <Image source = {require('./images/fire.jpg')}  style = {styles.backdrop} />
         </View>
           <View style={styles.wrapper}>
-            <TouchableOpacity activeOpacity={.5}
-            onPress={() => navigate("uploadPdf")}>
-              <View style={styles.button}>
-                <Text style={styles.buttonText}>Upload Results</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity activeOpacity={.5}
-            onPress={() => navigate("update")}>
-              <View style={styles.button}>
-                <Text style={styles.buttonText}>Update Supplementary Results</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity activeOpacity={.5}
-            onPress={() => navigate("teacherHome")}>
-              <View style={styles.button}>
-                <Text style={styles.buttonText}>View Result</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.container}>
-            <View style={styles.signupWrap}>
-              <Text style={styles.accountText}>Welcome to  EduHub</Text>
+          <View style={styles.inputWrap}>
+            <View style={styles.iconWrap}>
+              <Image source={personIcon} style={styles.icon} resizeMode="contain" />
             </View>
+            <TextInput 
+              placeholder="semester" 
+              placeholderTextColor="#FFF"
+              style={styles.input} 
+              onChangeText={(sem) => {this.setState({sem});}}
+            />
           </View>
+          <View style={styles.inputWrap}>
+            <View style={styles.iconWrap}>
+              <Image source={personIcon} style={styles.icon} resizeMode="contain" />
+            </View>
+            <TextInput 
+              placeholder="batch" 
+              placeholderTextColor="#FFF"
+              style={styles.input} 
+              onChangeText={(batch) => {this.setState({batch});}}
+            />
+          </View>
+          <TouchableOpacity activeOpacity={.5}
+          onPress={() => navigate("uploadPdf")}>
+            <View style={styles.button}>
+              <Text style={styles.buttonText}>select file</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity activeOpacity={.5}
+          onPress={() => alert("upload")}
+          >
+            <View style={styles.button}>
+              <Text style={styles.buttonText}>upload</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.container}>
+          <View style={styles.signupWrap}>
+            <Text style={styles.accountText}>upload to the EduHub</Text>
+          </View>
+        </View>
       </View>
     );
   }
@@ -71,7 +90,7 @@ export default class collegeHome extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: 30,
   },
   backgroundContainer: {
     position: 'absolute',
@@ -81,7 +100,14 @@ const styles = StyleSheet.create({
     right: 0,
   },
   wrapper: {
-    paddingVertical: 150,
+    paddingVertical: 50,
+  },
+  inputWrap: {
+    flexDirection: "row",
+    marginVertical: 10,
+    height: 40,
+    borderBottomWidth: 1,
+    borderBottomColor: "#CCC"
   },
   iconWrap: {
     paddingHorizontal: 7,

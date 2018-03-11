@@ -2,14 +2,14 @@ import React, { Component } from "react";
 import { StyleSheet, Text, Button, View, FlatList, ScrollView, TouchableHighlight,
   TouchableOpacity,Dimensions } from "react-native";
 import { StackNavigator } from "react-navigation";
-import { getit,getcs } from '../networking/server';
+import { getit,getcs,getmark } from '../networking/server';
 const { width, height } = Dimensions.get("window");
 class FlatListItem extends Component {
   render(){
     return(
       <View>
         <TouchableOpacity activeOpacity={.5}
-        onPress={() =>this.props.navigate("myhome",{rollno: this.props.item.rollno,department:this.props.department})}
+        onPress={() =>this.props.navigate("myhome",{rollno: this.props.item.rollno,department:this.props.department,sem:this.props.sem})}
         title="Home"
         >
           <View style={{
@@ -41,29 +41,19 @@ class Home extends Component {
       data1:[],
     });
   }
-  componentWillMount(){
-    const { params } = this.props.navigation.state;
-    if(params.d=="IT")
-      this.refreshDataFromServer(1);
-    if(params.d=="CS")
-      this.refreshDataFromServer(2);
-  }
-  refreshDataFromServer(i){
-    if(i==1)
-      getit().then((movies)=> {
-        this.setState({ dataapi: movies });
-      }).catch((error)=>{
-        this.setState({ dataapi: [] });
-      });
-    if(i==2)
-      getcs().then((movies)=> {
-        this.setState({ dataapi: movies });
-      }).catch((error)=>{
-        this.setState({ dataapi: [] });
-      });
-  }
+componentDidMount(){
+    this.refreshDataFromServer();
+}
+refreshDataFromServer(){
+  const { params } = this.props.navigation.state;
+    getmark(params.d,params.sem,params.b).then((movies)=> {
+      this.setState({ dataapi: movies });
+    }).catch((error)=>{  
+      this.setState({ dataapi: []});
+    });
+}
   static navigationOptions = {
-    title: 'Welcome',
+    title: 'Student List',
     headerStyle: { backgroundColor: '#e74c3c',height:25 },
     headerTitleStyle: { color: '#22313f',fontSize:15,justifyContent:"center",alignSelf: 'center' },
   };
@@ -77,7 +67,7 @@ class Home extends Component {
           data={this.state.dataapi}
           renderItem={({item,index}) => {
             return(
-              <FlatListItem item={item} index={index} navigate={navigate} department={state.params.d} >
+              <FlatListItem item={item} index={index} navigate={navigate} department={state.params.d} sem={state.params.sem} >
 
               </FlatListItem>
             )
@@ -86,7 +76,7 @@ class Home extends Component {
         />
          <View>
           <TouchableOpacity
-           onPress={() => navigate("totalA",{data:this.state.dataapi,d:state.params.d,sem:state.params.sem})}
+           onPress={() => navigate("totalA",{data:this.state.dataapi,d:state.params.d,sem:state.params.sem,b:state.params.b})}
           >
             <View style={styles.button}>
                 <Text style={styles.buttonText}>Total Analysis</Text>

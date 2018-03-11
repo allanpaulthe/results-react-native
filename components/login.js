@@ -9,10 +9,12 @@ import {
   TextInput,
   Button,
   TouchableOpacity,
-  Alert
+  Alert,
+  KeyboardAvoidingView
 } from 'react-native';
 import { StackNavigator } from "react-navigation";
 import { loginfunction } from '../networking/server';
+import { BackHandler } from 'react-native';
 
 const { width, height } = Dimensions.get("window");
 const mark = require("./images/login1_mark.png");
@@ -37,20 +39,20 @@ export default class LoginScreen extends Component {
       }
       trylogin=(navigate,u,p,list)=>{
         for(i=0;i<list.length;i++){
-          if(list[i].username==u&&list[i].password==p){
+          if(list[i].username.toUpperCase()==u.toUpperCase() && list[i].password==p){
             if(list[i].category=="teacher")
               navigate("teacherHome");
             else if(list[i].category=="college")
               navigate("collegehome");
             else if(list[i].category=="student")
-              navigate("myhome",{rollno: list[i].rollno,department:list[i].department});
+              navigate("stuSemList",{rollno: list[i].rollno,d:list[i].department});
           }
         }
       }
   render() {
     const { navigate } = this.props.navigation;
     return (
-      <View style={styles.container}>
+      <KeyboardAvoidingView style={styles.container}>
         <View style = {styles.backgroundContainer}>
             <Image source = {require('./images/fire.jpg')}  style = {styles.backdrop} />
         </View>
@@ -83,7 +85,7 @@ export default class LoginScreen extends Component {
             </View>
             <TouchableOpacity activeOpacity={.5}>
               <View>
-                <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
+                <Text style={styles.forgotPasswordText}>?</Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity activeOpacity={.5}
@@ -106,7 +108,7 @@ export default class LoginScreen extends Component {
               </TouchableOpacity>
             </View>
           </View>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }

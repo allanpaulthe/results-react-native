@@ -12,8 +12,7 @@ import {
   Alert,Picker
 } from 'react-native';
 import { StackNavigator } from "react-navigation";
-import { loginfunction } from '../networking/server';
-import { DocumentPicker, DocumentPickerUtil } from 'react-native-document-picker';
+
 
 const { width, height } = Dimensions.get("window");
 const mark = require("./images/login1_mark.png");
@@ -22,56 +21,33 @@ const personIcon = require("./images/login1_person.png");
 const email = require("./images/email.png");
 
 
-export default class uploadPdf extends Component {
+export default class update extends Component {
     constructor(props) {
         super(props);
-        this.state = {sem: '',batch: '',result:[],type:''};
+        this.state = {sem: '',roll: '',dep:'',grade:'',code:''};
       }
       static navigationOptions = {
-        title: 'upload',
+        title: 'update',
         headerStyle: { backgroundColor: '#e74c3c',height:25 },
         headerTitleStyle: { color: '#22313f',fontSize:15,justifyContent:"center",alignSelf: 'center' },
       };
-      handlePress = () => {
-        DocumentPicker.show({
-              filetype: [DocumentPickerUtil.pdf()],
-            },(error,res) => {
-              this.setState({result:res});
-              /*alert(
-                 res.uri,
-                 res.type, // mime type
-                 res.fileName,
-                 res.fileSize
-              );*/
-            });
-      }
-      tryUpload = (navigate,s,b,r) =>{
-          url='http://127.0.0.1:8000/eee/'+s+'/'+b+'/';
-          const data = new FormData();
-          data.append('name', 'testName'); // you can append anyone.
-          data.append('pdf', {
-            uri: r.uri,
-            type: r.type,
-            name: r.fileName
-          });
-          fetch(url, {
-            method: 'post',
-            body: data
-          }).then(res => {
+      tryUpdate = (navigate,s,d,r,g,c) =>{
+          url='http://127.0.0.1:8000/apii/updateMark/'+s+'/'+d+'/'+r+'/'+g+'/'+c+'/';
+          fetch(url).then(res => {
             status=res.status;
             if(status=='200'){
               alert("success");
               navigate("collegehome");
             }
-            if(status=='400'){
-              alert("already exist data");
+            if(status=='400' || status=='404'){
+              alert("Some Error in the Data entered please verify ");
             }
           });
       }
   render() {
     const { navigate } = this.props.navigation;
     return (
-      <View style={styles.container}>
+        <View style={styles.container}>
         <View style = {styles.backgroundContainer}>
             <Image source = {require('./images/fire.jpg')}  style = {styles.backdrop} />
         </View>
@@ -98,12 +74,33 @@ export default class uploadPdf extends Component {
             <Picker
               style={styles.input}
               selectedValue={this.state.batch}
-              onValueChange={(itemValue, itemIndex) => {this.setState({batch: itemValue})}}>
-              <Picker.Item value='' label='Batch' />
-              <Picker.Item label="16-20" value="16" />
-              <Picker.Item label="17-21" value="17" />
-              <Picker.Item label="15-19" value="15" />
+              onValueChange={(itemValue, itemIndex) => {this.setState({dep: itemValue})}}>
+              <Picker.Item value='' label='Department' />
+              <Picker.Item label="Computer Science" value="CS" />
+              <Picker.Item label="Information Technology" value="IT" />
             </Picker>
+          </View>
+          <View style={styles.inputWrap}>
+            <View style={styles.iconWrap}>
+              <Image source={personIcon} style={styles.icon} resizeMode="contain" />
+            </View>
+            <TextInput 
+                placeholderTextColor="#FFF"
+                placeholder="RollNo" 
+                style={styles.input}  
+                onChangeText={(roll) => this.setState({roll})}
+              />
+          </View>
+          <View style={styles.inputWrap}>
+            <View style={styles.iconWrap}>
+              <Image source={personIcon} style={styles.icon} resizeMode="contain" />
+            </View>
+            <TextInput 
+                placeholderTextColor="#FFF"
+                placeholder="Subject Code" 
+                style={styles.input}  
+                onChangeText={(code) => this.setState({code})}
+              />
           </View>
           <View style={styles.inputWrap}>
             <View style={styles.iconWrap}>
@@ -111,26 +108,24 @@ export default class uploadPdf extends Component {
             </View>
             <Picker
               style={styles.input}
-              selectedValue={this.state.type}
-              onValueChange={(itemValue, itemIndex) => {this.setState({type: itemValue})}}>
-              <Picker.Item value='' label='Type of result' />
-              <Picker.Item label="Normal" value="0" />
-              <Picker.Item label="Revaluation" value="1" />
-              <Picker.Item label="Supplimentary" value="2" />
+              selectedValue={this.state.batch}
+              onValueChange={(itemValue, itemIndex) => {this.setState({grade: itemValue})}}>
+              <Picker.Item value='' label='Grade' />
+              <Picker.Item label="O GRADE" value="O" />
+              <Picker.Item label="A+ GRADE" value="A+" />
+              <Picker.Item label="A GRADE" value="A" />
+              <Picker.Item label="B+ GRADE" value="B+" />
+              <Picker.Item label="B GRADE" value="B" />
+              <Picker.Item label="C GRADE" value="C" />
+              <Picker.Item label="P GRADE" value="P" />
+              <Picker.Item label="FAIL" value="F" />
             </Picker>
           </View>
           <TouchableOpacity activeOpacity={.5}
-          onPress={this.handlePress}
+            onPress={()=> this.tryUpdate(navigate,this.state.sem,this.state.dep,this.state.roll,this.state.grade,this.state.code)}
           >
             <View style={styles.button}>
-              <Text style={styles.buttonText}>choose file</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity activeOpacity={.5}
-            onPress={()=> this.tryUpload(navigate,this.state.sem,this.state.batch,this.state.result)}
-          >
-            <View style={styles.button}>
-              <Text style={styles.buttonText}>upload</Text>
+              <Text style={styles.buttonText}>update</Text>
             </View>
           </TouchableOpacity>
         </View>

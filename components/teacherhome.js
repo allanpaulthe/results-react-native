@@ -10,7 +10,7 @@ class teacherHome extends Component {
     super(props);
   }
   static navigationOptions = {
-    title: 'Welcome',
+    title: 'Departments',
     headerStyle: { backgroundColor: '#e74c3c',height:25 },
     headerTitleStyle: { color: '#22313f',fontSize:15,justifyContent:"center",alignSelf: 'center' },
   };
@@ -21,7 +21,7 @@ class teacherHome extends Component {
         <View>
             <Text style={{
                 color:'black',
-                fontSize:20,
+                fontSize:30,
                 fontStyle:'italic',
                 fontWeight:'bold',
                 fontFamily:'monospace',
@@ -32,22 +32,24 @@ class teacherHome extends Component {
             </Text>
         </View>
         <View style={styles.container}>
-            <TouchableOpacity
-                style={styles.button}
-                onPress={() => navigate("semList",{d:'IT'})}
-            >
-            <Text
-                style={styles.buttonText}
-            >Information Technology</Text>
-            </TouchableOpacity> 
-            <TouchableOpacity
-                style={styles.button}
-                onPress={() => navigate("semList",{d:'CS'})}
-            >
-            <Text
-                style={styles.buttonText}
-            >Computer Science</Text>
-            </TouchableOpacity>     
+            <View style={styles.row}>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => navigate("semList",{d:'IT'})}
+                >
+                <Text
+                    style={styles.buttonText}
+                >Information Technology</Text>
+                </TouchableOpacity> 
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => navigate("semList",{d:'CS'})}
+                >
+                <Text
+                    style={styles.buttonText}
+                >Computer Science</Text>
+                </TouchableOpacity> 
+            </View>    
         </View>
     </View>
     );
@@ -56,24 +58,32 @@ class teacherHome extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        justifyContent: 'center',
+        flexDirection:'column',
+        paddingHorizontal: 30,
+      },
+      row: {
+        flex: 1,
+        flexDirection: 'column',
         justifyContent: 'space-between',
-        flexDirection:'row',
-        paddingHorizontal: 25,
-        alignItems:'flex-start'
+        marginBottom: 10,
+        alignItems:'center'
       },
       button: {
         backgroundColor: 'blue',
         padding:2,
         marginTop:25,
-        width:160,
-        height:160,
+        width:270,
+        height:80,
+        borderRadius:20
       },
       buttonText:{
           color:'white',
           fontSize: 20,
+          fontWeight:'bold',
           textAlign:'center',
-          paddingVertical:40
-      }
+          paddingVertical:20
+      },
 });
 
 export default teacherHome;

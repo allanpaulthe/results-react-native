@@ -9,7 +9,8 @@ import {
   TextInput,
   Button,
   TouchableOpacity,
-  Alert
+  Alert,
+  KeyboardAvoidingView
 } from 'react-native';
 import { StackNavigator } from "react-navigation";
 
@@ -84,10 +85,15 @@ export default class teachersignupScreen extends Component {
         this.setState({ validatedemail : true });
       }
     }
+    static navigationOptions = {
+      title: 'Teacher Signup',
+      headerStyle: { backgroundColor: '#e74c3c',height:25 },
+      headerTitleStyle: { color: '#22313f',fontSize:15,justifyContent:"center",alignSelf: 'center' },
+    };
   render() {
     const { navigate } = this.props.navigation;
     return (
-      <View style={styles.container}>
+      <KeyboardAvoidingView style={styles.container} behavior="padding">
         <View style = {styles.backgroundContainer}>
             <Image source = {require('./images/fire.jpg')}  style = {styles.backdrop} />
         </View>
@@ -172,7 +178,7 @@ export default class teachersignupScreen extends Component {
             <Text style={styles.accountText}>signup to the EduHub</Text>
           </View>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }
@@ -190,11 +196,11 @@ const styles = StyleSheet.create({
     right: 0,
   },
   wrapper: {
-    paddingVertical: 50,
+    paddingVertical: 0,
   },
   inputWrap: {
     flexDirection: "row",
-    marginVertical: 10,
+    marginVertical: 8,
     height: 40,
     borderBottomWidth: 1,
     borderBottomColor: "#CCC"

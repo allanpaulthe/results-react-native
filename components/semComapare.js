@@ -1,27 +1,28 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, Button, View, FlatList, ScrollView,Dimensions,Alert,TouchableOpacity } from "react-native";
 import { StackNavigator } from "react-navigation";
-import { calculateAll,getSub,SubAna } from '../networking/server';
+import { calculateAll,getSub,semCompare } from '../networking/server';
 const { width, height } = Dimensions.get("window");
+import { Bar } from 'react-native-pathjs-charts';
 class FlatListItem1 extends Component {
   render(){
     return(
       <View>
-          <TouchableOpacity style={{
-            flex:1,
-            backgroundColor:'#f39c12'
-          }}
-          onPress={() =>this.props.navigate("SubAnalysis",{d:this.props.d,sem:this.props.sem,b:this.props.b,sub:this.props.item.name})}
-          >
-            <Text style={styles.welcome}>
-              {this.props.item.name}
-            </Text>
-            <Text style={styles.data}>
-                pass percentage:  {this.props.item.v}
-            </Text>
-          </TouchableOpacity>
+            <View style={{
+              flex:1,
+              backgroundColor:'#f39c12',
+              marginTop:25,
+              height:100,
+            }}>
+              <Text style={styles.welcome}>
+                {this.props.item.name}
+              </Text>
+              <Text style={styles.data}>
+                  pass percentage:  {this.props.item.v}
+              </Text>
+            </View>
           <View style={{
-            height:1,
+            height:3,
             backgroundColor:"black"
           }}>
           </View>
@@ -29,66 +30,67 @@ class FlatListItem1 extends Component {
     );
   }
 }
-class totalA extends Component {
+class semCompare1 extends Component {
   constructor(props){
     super(props);
     this.state=({
       dataapi: [],
       subs:[],
       total:[],
+      res:[]
     });
   }
-  componentWillMount(){
+  componentDidMount(){
     const { params } = this.props.navigation.state;
-    this.refreshDataFromServer();
+   // this.refreshDataFromServer();
+    this.getResult();
   }
-  refreshDataFromServer(){
+  getResult(){
     const { params } = this.props.navigation.state;
-      calculateAll(params.d,params.sem,params.b).then((movies)=> {
-        this.setState({ dataapi: movies });
-        getSub(params.d,params.sem).then((alan)=>{
-          this.setState({ subs: alan });
-          for(i=1;i<alan.length;i++){
-            var obj={
-              "v":movies[i],
-              "name":alan[i],
-            }
-            this.state.total.push(obj);
-          }
-        })
-      });
+    semCompare(params.d).then((alan)=>{
+      this.setState({subs:alan});
+    }).catch((error)=>{
+      this.setState({subs:[]});
+    })
+  } 
+  tryNavigate(){
+    const { navigate } = this.props.navigation;
+    const { params } = this.props.navigation.state;
+    semCompare(params.d).then((alan)=>{
+      navigate("semChart",{d:alan});
+    });
   }
   static navigationOptions = {
-    title: 'Total Analysis',
+    title: 'Semester Comparison',
     headerStyle: { backgroundColor: '#e74c3c',height:25 },
     headerTitleStyle: { color: '#22313f',fontSize:15,justifyContent:"center",alignSelf: 'center' },
   };
   render() {
     const { navigate } = this.props.navigation;
-    const {state} = this.props.navigation;
+    const { state } = this.props.navigation;
     return (
      <View style={styles.container}>
-        <Text style={styles.welcome}>
-              Total:{this.state.dataapi[0]}
-        </Text>
         <FlatList
           style={{
             flex:1,
             width:width,
           }}
-          data={this.state.total}
+          data={this.state.subs}
           renderItem={({item,index}) => {
-                return(
-                    <FlatListItem1 item={item} index={index} d={state.params.d} sem={state.params.sem} b={state.params.b} navigate={navigate} >
-      
-                    </FlatListItem1>
-                  )
+              if(this.state.subs!=[]){
+                    return(
+                        <FlatListItem1 item={item} index={index}>
+        
+                        </FlatListItem1>
+                    )
+                }
+                  
           }}
           keyExtractor={item => item.name}
         />  
         <TouchableOpacity
           //onPress={() => calculate('IT','2',this.props.item.rollno)}
-          onPress={() => navigate("chart",{subs:this.state.subs,percen:this.state.dataapi})}
+          onPress={() => this.tryNavigate()}
         >
               <View style={styles.button}>
                 <Text style={styles.buttonText}>Graphical view</Text>
@@ -107,14 +109,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#eccc68"
   },
   welcome: {
-    fontSize: 20,
+    fontSize: 30,
     textAlign: "center",
     fontWeight: 'bold',
     color:'#2c3e50',
     margin: 10
   },
   data:{
-    fontSize:15,
+    fontSize:20,
     textAlign:'center',
     
   },
@@ -141,4 +143,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default totalA;
+export default semCompare1;

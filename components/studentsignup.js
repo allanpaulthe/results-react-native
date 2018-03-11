@@ -87,7 +87,7 @@ export default class studentsignupScreen extends Component {
           }
         }
       static navigationOptions = {
-        title: 'signup',
+        title: ' Student signup',
         headerStyle: { backgroundColor: '#e74c3c',height:25 },
         headerTitleStyle: { color: '#22313f',fontSize:15,justifyContent:"center",alignSelf: 'center' },
       };
@@ -163,8 +163,8 @@ export default class studentsignupScreen extends Component {
               selectedValue={this.state.department}
               onValueChange={(itemValue, itemIndex) => {this.setState({Department: itemValue});this.state.validate[4]=true}}>
               <Picker.Item value='' label='Department' />
-              <Picker.Item label="Information Technology" value="Information Technology" />
-              <Picker.Item label="Computer Science" value="Computer Science" />
+              <Picker.Item label="Information Technology" value="IT" />
+              <Picker.Item label="Computer Science" value="CS" />
             </Picker>
           </View>
           <View style={styles.inputWrap}>
@@ -200,7 +200,7 @@ export default class studentsignupScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 30,
+    padding: 25,
   },
   backgroundContainer: {
     position: 'absolute',
@@ -210,12 +210,12 @@ const styles = StyleSheet.create({
     right: 0,
   },
   wrapper: {
-    paddingVertical: 50,
+    paddingVertical: 10,
   },
   inputWrap: {
     flexDirection: "row",
     marginVertical: 5,
-    height: 40,
+    height: 38,
     borderBottomWidth: 1,
     borderBottomColor: "#CCC"
   },
@@ -257,7 +257,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 10,
+    marginTop: 5,
   },
   accountText: {
     color: "#D8D8D8"

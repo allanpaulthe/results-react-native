@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, Button, View, FlatList, ScrollView,Dimensions,Alert } from "react-native";
 import { StackNavigator } from "react-navigation";
-import { getit,getcs,calculate } from '../networking/server';
+import { getit,getcs,SubAna } from '../networking/server';
 const { width, height } = Dimensions.get("window");
-class selfA extends Component {
+class subjectAnalysis extends Component {
   constructor(props){
     super(props);
     this.state=({
@@ -16,7 +16,7 @@ class selfA extends Component {
   }
   refreshDataFromServer(){
     const { params } = this.props.navigation.state;
-      calculate(params.d,params.sem,params.roll).then((movies)=> {
+      SubAna(params.d,params.sem,params.b,params.sub).then((movies)=> {
         this.setState({ dataapi: movies });
       }).catch((error)=>{
         this.setState({ dataapi: [] });
@@ -32,11 +32,17 @@ class selfA extends Component {
     const {state} = this.props.navigation;
     return (
      <View style={styles.container}>
-        <Text style={styles.welcome}>{this.state.dataapi[1]}</Text>  
-        <Text style={styles.instructions}>gpa:{this.state.dataapi[0]}</Text> 
-        <Text style={styles.instructions}>percentage:{this.state.dataapi[2]}</Text>
-        <Text style={styles.instructions}>No of Arrears:{this.state.dataapi[4]}</Text> 
-        <Text style={styles.instructions}>Arrear Subjects:{this.state.dataapi[3]}</Text>    
+        <Text style={styles.welcome}>{state.params.sub}</Text>  
+        <Text style={styles.instructions}> O grades:{this.state.dataapi[0]}</Text> 
+        <Text style={styles.instructions}> A+ grades:{this.state.dataapi[1]}</Text>
+        <Text style={styles.instructions}> A grades:{this.state.dataapi[2]}</Text> 
+        <Text style={styles.instructions}> B+ grades:{this.state.dataapi[3]}</Text>  
+        <Text style={styles.instructions}> B grades:{this.state.dataapi[4]}</Text> 
+        <Text style={styles.instructions}> C grades:{this.state.dataapi[5]}</Text> 
+        <Text style={styles.instructions}> p grades:{this.state.dataapi[6]}</Text> 
+        <Text style={styles.instructions}> passed:{this.state.dataapi[10]}</Text>  
+        <Text style={styles.instructions}> failed:{this.state.dataapi[9]}</Text> 
+        <Text style={styles.instructions}> percentage:{this.state.dataapi[7]}</Text>  
       </View>
     );
   }
@@ -69,4 +75,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default selfA;
+export default subjectAnalysis;
